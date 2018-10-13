@@ -1,0 +1,18 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FindInFiles"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="FindInFiles.MainWindow"
+        mc:Ignorable="d"
+        Title="FindInFiles" Height="392.388" Width="781.747">
+	<Grid>
+		<Button x:Name="btnFind" Content="Find" HorizontalAlignment="Left" Margin="242,19,0,0" VerticalAlignment="Top" Width="75" Click="btnFind_Click"/>
+		<Button x:Name="btnBrowse" Content="..." HorizontalAlignment="Left" Margin="686,17,0,0" VerticalAlignment="Top" Width="75" Click="btnBrowse_Click"/>
+		<TextBox x:Name="txtString" HorizontalAlignment="Left" Height="23" Margin="10,18,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="227"/>
+		<TextBox x:Name="txtFolder" HorizontalAlignment="Left" Height="23" Margin="356,15,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="325"/>
+		<DataGrid x:Name="gridResults" HorizontalAlignment="Left" Height="296" Margin="10,55,0,0" VerticalAlignment="Top" Width="754"/>
+
+	</Grid>
+</Window>
