@@ -8,11 +8,15 @@
         mc:Ignorable="d"
         Title="FindInFiles" Height="392.388" Width="781.747">
 	<Grid>
-		<Button x:Name="btnFind" Content="Find" HorizontalAlignment="Left" Margin="242,19,0,0" VerticalAlignment="Top" Width="75" Click="btnFind_Click"/>
-		<Button x:Name="btnBrowse" Content="..." HorizontalAlignment="Left" Margin="686,17,0,0" VerticalAlignment="Top" Width="75" Click="btnBrowse_Click"/>
-		<TextBox x:Name="txtString" HorizontalAlignment="Left" Height="23" Margin="10,18,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="227"/>
-		<TextBox x:Name="txtFolder" HorizontalAlignment="Left" Height="23" Margin="356,15,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="325"/>
-		<DataGrid x:Name="gridResults" HorizontalAlignment="Left" Height="296" Margin="10,55,0,0" VerticalAlignment="Top" Width="754"/>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="29*"/>
+			<ColumnDefinition Width="100*"/>
+		</Grid.ColumnDefinitions>
+		<Button x:Name="btnFind" Content="Find" HorizontalAlignment="Left" Margin="68.255,19,0,0" VerticalAlignment="Top" Width="75" Click="btnFind_Click" Grid.Column="1"/>
+		<Button x:Name="btnBrowse" Content="..." HorizontalAlignment="Left" Margin="512.255,17,0,0" VerticalAlignment="Top" Width="75" Click="btnBrowse_Click" Grid.Column="1"/>
+		<TextBox x:Name="txtSearch" HorizontalAlignment="Left" Height="23" Margin="10,18,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="227" KeyDown="OnKeyDownSearch" Grid.ColumnSpan="2"/>
+		<TextBox x:Name="txtFolder" HorizontalAlignment="Left" Height="23" Margin="182.255,15,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="325" Grid.Column="1"/>
+		<DataGrid x:Name="gridResults" HorizontalAlignment="Left" Height="296" Margin="10,55,0,0" VerticalAlignment="Top" Width="754" Grid.ColumnSpan="2" MouseDoubleClick="gridResults_MouseDoubleClick" IsReadOnly="True"/>
 
 	</Grid>
 </Window>

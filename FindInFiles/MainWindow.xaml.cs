@@ -1,9 +1,11 @@
 ﻿// simple Find In Files tool for searching files containting given string
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 
 namespace FindInFiles
 {
@@ -36,9 +38,9 @@ namespace FindInFiles
 
         private void btnFind_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(txtString.Text) == false)
+            if (string.IsNullOrEmpty(txtSearch.Text) == false)
             {
-                SearchFiles(txtString.Text, txtFolder.Text);
+                SearchFiles(txtSearch.Text, txtFolder.Text);
             }
         }
 
@@ -47,10 +49,38 @@ namespace FindInFiles
             // TODO browse for folder
         }
 
+        // special keys for search field
+        private void OnKeyDownSearch(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Escape:
+                    txtSearch.Text = "";
+                    break;
+                case Key.Return:
+                    SearchFiles(txtSearch.Text, txtFolder.Text);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        // open file on double click
+        private void gridResults_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (gridResults.SelectedItem == null) return;
+            var selectedRow = gridResults.SelectedItem as ResultItem;
+
+            Process myProcess = new Process();
+            myProcess.StartInfo.FileName = selectedRow.path;
+            //myProcess.StartInfo.Arguments = "-n###" ;// TODO jump to line in notepad++, but need to know linenumber..
+            myProcess.Start();
+        }
+
         void SearchFiles(string searchString, string sourceFolder)
         {
             // validate folder
-            if (Directory.Exists(sourceFolder)==false)
+            if (Directory.Exists(sourceFolder) == false)
             {
                 return;
             }
@@ -74,6 +104,13 @@ namespace FindInFiles
                     var o = new ResultItem();
                     o.path = files[i];
                     o.snippet = wholeFile.Substring(hitIndex, (previewSnippetLength + hitIndex >= wholeFile.Length) ? wholeFile.Length : previewSnippetLength);
+                    o.snippet = o.snippet.Replace('\n', '¶'); // replace end of lines
+
+                    // TODO get linenumber, or estimate?
+                    // but that would mean have to parse again??
+                    // maybe do this only if selected file.. (but that means need to read file again..)
+                    // o.lineNumber = ...
+
                     results.Add(o);
                     continue;
                 }
@@ -87,6 +124,7 @@ public class ResultItem
 {
     public string path { get; set; }
     public string snippet { get; set; }
+    //    public int lineNumber { get; set; }
 }
 
 
