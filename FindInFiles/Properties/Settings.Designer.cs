@@ -25,7 +25,7 @@ namespace FindInFiles.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("650")]
+        [global::System.Configuration.DefaultSettingValueAttribute("780")]
         public int windowWidth {
             get {
                 return ((int)(this["windowWidth"]));
@@ -37,7 +37,7 @@ namespace FindInFiles.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("500")]
+        [global::System.Configuration.DefaultSettingValueAttribute("420")]
         public int windowHeight {
             get {
                 return ((int)(this["windowHeight"]));

@@ -42,9 +42,9 @@ namespace FindInFiles
             this.Width = Properties.Settings.Default.windowWidth;
             this.Height = Properties.Settings.Default.windowHeight;
 
-            // search history
-            //cmbSearch.Items.Add(Properties.Settings.Default.recentSearches.Cast<string[]>());
+            // restore search history
             cmbSearch.ItemsSource = Properties.Settings.Default.recentSearches;
+            cmbFolder.ItemsSource = Properties.Settings.Default.recentFolders;
 
             // focus on searchbox
             cmbSearch.Focus();
@@ -66,9 +66,9 @@ namespace FindInFiles
             }
         }
 
+        // save settings on exit
         void OnWindowClose(object sender, CancelEventArgs e)
         {
-            // save settings
             Properties.Settings.Default.windowWidth = (int)this.Width;
             Properties.Settings.Default.windowHeight = (int)this.Height;
             Properties.Settings.Default.Save();
@@ -97,13 +97,38 @@ namespace FindInFiles
             if (Properties.Settings.Default.recentSearches.Contains(searchString) == false)
             {
                 Properties.Settings.Default.recentSearches.Add(searchString);
-                Console.WriteLine("added");
             }
             Properties.Settings.Default.Save();
 
             // rebuild dropdown
             cmbSearch.ItemsSource = null;
             cmbSearch.ItemsSource = Properties.Settings.Default.recentSearches;
+        }
+
+        void AddFolderHistory(string folderString)
+        {
+            // handle settings
+            if (Properties.Settings.Default.recentFolders == null)
+            {
+                Properties.Settings.Default.recentFolders = new StringCollection();
+            }
+
+            // remove old items
+            if (Properties.Settings.Default.recentFolders.Count > maxRecentItems)
+            {
+                Properties.Settings.Default.recentFolders.RemoveAt(0);
+            }
+
+            // skip if duplicate
+            if (Properties.Settings.Default.recentFolders.Contains(folderString) == false)
+            {
+                Properties.Settings.Default.recentFolders.Add(folderString);
+            }
+            Properties.Settings.Default.Save();
+
+            // rebuild dropdown
+            cmbFolder.ItemsSource = null;
+            cmbFolder.ItemsSource = Properties.Settings.Default.recentFolders;
         }
 
         private void btnBrowse_Click(object sender, RoutedEventArgs e)
@@ -117,10 +142,26 @@ namespace FindInFiles
             switch (e.Key)
             {
                 case Key.Escape:
-                    cmbSearch.Text = "";
+                    ((ComboBox)sender).Text = "";
                     break;
                 case Key.Return:
                     Search(cmbSearch.Text, cmbFolder.Text);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        // special keys for folder field
+        private void OnKeyDownFolder(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Escape:
+                    ((ComboBox)sender).Text = "";
+                    break;
+                case Key.Return:
+                    AddFolderHistory(((ComboBox)sender).Text);
                     break;
                 default:
                     break;
@@ -168,7 +209,6 @@ namespace FindInFiles
                 int hitIndex = wholeFile.IndexOf(searchString, StringComparison.OrdinalIgnoreCase);
                 if (hitIndex > -1)
                 {
-                    Console.WriteLine(files[i] + " :" + hitIndex);
                     var o = new ResultItem();
                     o.path = files[i];
                     o.snippet = wholeFile.Substring(hitIndex, (previewSnippetLength + hitIndex >= wholeFile.Length) ? wholeFile.Length : previewSnippetLength);

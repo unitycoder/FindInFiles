@@ -3,10 +3,10 @@
   <Profiles />
   <Settings>
     <Setting Name="windowWidth" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">650</Value>
+      <Value Profile="(Default)">780</Value>
     </Setting>
     <Setting Name="windowHeight" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">500</Value>
+      <Value Profile="(Default)">420</Value>
     </Setting>
     <Setting Name="recentSearches" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)" />
