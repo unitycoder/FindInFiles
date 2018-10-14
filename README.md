@@ -23,3 +23,7 @@ Still work-in-progress (but usable already)
 
 ![image](https://user-images.githubusercontent.com/5438317/46906957-f084f480-cf3d-11e8-9d22-45e67f614126.png)
 
+<hr>
+
+Unity Forum Thread
+https://forum.unity.com/threads/external-tool-search-all-files-containing-some-text.568705/
