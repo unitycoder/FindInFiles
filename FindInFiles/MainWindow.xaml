@@ -6,17 +6,19 @@
         xmlns:local="clr-namespace:FindInFiles"
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="FindInFiles.MainWindow"
         mc:Ignorable="d"
-        Title="FindInFiles" Height="392.388" Width="781.747">
+        Title="FindInFiles" Height="392.388" Width="781.747" Icon="findinfiles.ico">
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="29*"/>
 			<ColumnDefinition Width="100*"/>
 		</Grid.ColumnDefinitions>
-		<Button x:Name="btnFind" Content="Find" HorizontalAlignment="Left" Margin="68.255,19,0,0" VerticalAlignment="Top" Width="75" Click="btnFind_Click" Grid.Column="1"/>
-		<Button x:Name="btnBrowse" Content="..." HorizontalAlignment="Left" Margin="512.255,17,0,0" VerticalAlignment="Top" Width="75" Click="btnBrowse_Click" Grid.Column="1"/>
-		<TextBox x:Name="txtSearch" HorizontalAlignment="Left" Height="23" Margin="10,18,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="227" KeyDown="OnKeyDownSearch" Grid.ColumnSpan="2"/>
-		<TextBox x:Name="txtFolder" HorizontalAlignment="Left" Height="23" Margin="182.255,15,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="325" Grid.Column="1"/>
-		<DataGrid x:Name="gridResults" HorizontalAlignment="Left" Height="296" Margin="10,55,0,0" VerticalAlignment="Top" Width="754" Grid.ColumnSpan="2" MouseDoubleClick="gridResults_MouseDoubleClick" IsReadOnly="True"/>
+		<Button x:Name="btnFind" Content="Find" HorizontalAlignment="Left" Margin="68,28,0,0" VerticalAlignment="Top" Width="75" Click="btnFind_Click" Grid.Column="1" Height="22"/>
+		<Button x:Name="btnBrowse" Content="..." HorizontalAlignment="Left" Margin="512,28,0,0" VerticalAlignment="Top" Width="75" Click="btnBrowse_Click" Grid.Column="1" Height="22" IsEnabled="False"/>
+		<DataGrid x:Name="gridResults" HorizontalAlignment="Left" Height="294" Margin="11,58,0,0" VerticalAlignment="Top" Width="754" Grid.ColumnSpan="2" MouseDoubleClick="gridResults_MouseDoubleClick" IsReadOnly="True" IsTabStop="True" TabIndex="2"/>
+		<ComboBox x:Name="cmbSearch" HorizontalAlignment="Left" Margin="10,28,0,0" VerticalAlignment="Top" Width="227" KeyDown="OnKeyDownSearch" Grid.ColumnSpan="2" IsEditable="True" DropDownClosed="cmbSearch_DropDownClosed" IsSynchronizedWithCurrentItem="True" IsTabStop="True" TabIndex="0" Loaded="cmbSearch_Loaded" />
+		<ComboBox x:Name="cmbFolder" Grid.Column="1" HorizontalAlignment="Left" Margin="182,28,0,0" VerticalAlignment="Top" Width="325" IsEditable="True" IsTabStop="True" TabIndex="1"/>
+		<Label Content="Search String" HorizontalAlignment="Left" Margin="6,8,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.026,0.308" Height="30"/>
+		<Label Content="Folder" HorizontalAlignment="Left" Margin="177,8,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.026,0.308" Height="30" Grid.Column="1"/>
 
 	</Grid>
 </Window>

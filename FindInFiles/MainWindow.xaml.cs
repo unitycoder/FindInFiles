@@ -1,10 +1,13 @@
 ﻿// simple Find In Files tool for searching files containting given string
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace FindInFiles
@@ -16,6 +19,7 @@ namespace FindInFiles
     {
         string[] fileExtensions = new[] { "*.txt", "*.shader", "*.cs", "*.log", "*.js", "*.cging" };
         const int previewSnippetLength = 32;
+        const int maxRecentItems = 32;
 
         public MainWindow()
         {
@@ -31,17 +35,75 @@ namespace FindInFiles
             // have any args? first item is exe name, skip that
             if (args.Length > 1)
             {
-                txtFolder.Text = args[1];
+                cmbFolder.Text = args[1];
             }
 
+            // window size
+            this.Width = Properties.Settings.Default.windowWidth;
+            this.Height = Properties.Settings.Default.windowHeight;
+
+            // search history
+            //cmbSearch.Items.Add(Properties.Settings.Default.recentSearches.Cast<string[]>());
+            cmbSearch.ItemsSource = Properties.Settings.Default.recentSearches;
+
+            // focus on searchbox
+            cmbSearch.Focus();
+
+            // get close event, so can save settings
+            Application.Current.MainWindow.Closing += new CancelEventHandler(OnWindowClose);
+        }
+
+        // force combobox text to be selected at start https://stackoverflow.com/q/31483650/5452781
+        private void cmbSearch_Loaded(object sender, RoutedEventArgs e)
+        {
+            ComboBox cmBox = (System.Windows.Controls.ComboBox)sender;
+            var textBox = (cmBox.Template.FindName("PART_EditableTextBox",
+                           cmBox) as TextBox);
+            if (textBox != null)
+            {
+                textBox.Focus();
+                textBox.SelectAll();
+            }
+        }
+
+        void OnWindowClose(object sender, CancelEventArgs e)
+        {
+            // save settings
+            Properties.Settings.Default.windowWidth = (int)this.Width;
+            Properties.Settings.Default.windowHeight = (int)this.Height;
+            Properties.Settings.Default.Save();
         }
 
         private void btnFind_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(txtSearch.Text) == false)
+            Search(cmbSearch.Text, cmbFolder.Text);
+        }
+
+        void AddSearchHistory(string searchString)
+        {
+            // handle settings
+            if (Properties.Settings.Default.recentSearches == null)
             {
-                SearchFiles(txtSearch.Text, txtFolder.Text);
+                Properties.Settings.Default.recentSearches = new StringCollection();
             }
+
+            // remove old items
+            if (Properties.Settings.Default.recentSearches.Count > maxRecentItems)
+            {
+                Properties.Settings.Default.recentSearches.RemoveAt(0);
+            }
+
+            // skip if duplicate
+            if (Properties.Settings.Default.recentSearches.Contains(searchString) == false)
+            {
+                Properties.Settings.Default.recentSearches.Add(searchString);
+                Console.WriteLine("added");
+            }
+            Properties.Settings.Default.Save();
+
+            // rebuild dropdown
+            cmbSearch.ItemsSource = null;
+            cmbSearch.ItemsSource = Properties.Settings.Default.recentSearches;
         }
 
         private void btnBrowse_Click(object sender, RoutedEventArgs e)
@@ -55,10 +117,10 @@ namespace FindInFiles
             switch (e.Key)
             {
                 case Key.Escape:
-                    txtSearch.Text = "";
+                    cmbSearch.Text = "";
                     break;
                 case Key.Return:
-                    SearchFiles(txtSearch.Text, txtFolder.Text);
+                    Search(cmbSearch.Text, cmbFolder.Text);
                     break;
                 default:
                     break;
@@ -77,8 +139,14 @@ namespace FindInFiles
             myProcess.Start();
         }
 
-        void SearchFiles(string searchString, string sourceFolder)
+        // main search method
+        void Search(string searchString, string sourceFolder)
         {
+            if (string.IsNullOrEmpty(searchString) == true) return;
+            if (string.IsNullOrEmpty(sourceFolder) == true) return;
+
+            AddSearchHistory(cmbSearch.Text);
+
             // validate folder
             if (Directory.Exists(sourceFolder) == false)
             {
@@ -116,6 +184,12 @@ namespace FindInFiles
                 }
             }
             gridResults.ItemsSource = results;
+        }
+
+        // recent search item selected
+        private void cmbSearch_DropDownClosed(object sender, EventArgs e)
+        {
+            Search(cmbSearch.Text, cmbFolder.Text);
         }
     }
 }
