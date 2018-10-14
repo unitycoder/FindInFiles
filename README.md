@@ -10,13 +10,13 @@ Still work-in-progress (but usable already)
 - Search text in files from given folder (and subfolders)
 - Can be launched from Commandline or Explorer context menu (to automatically pass target folder)
 - Double click results to open file in default editor
+- Save search history (to search again easily)
+- Resizeable window
 
 ## Planned Features
 - Jump to line (if you are using notepad++ or others that support linenumber parameter)
-- Save search history (to search again easily)
 - Sort results by modified file date
 - Settings to allow modifying searched file extensions
-- Resizeable window
 - More? You can comment using issues here^
 
 <hr>
