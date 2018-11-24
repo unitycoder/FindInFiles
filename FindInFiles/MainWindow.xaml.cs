@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -20,6 +21,7 @@ namespace FindInFiles
         string[] fileExtensions = new[] { "*.txt", "*.shader", "*.cs", "*.log", "*.js", "*.cging" };
         const int previewSnippetLength = 32;
         const int maxRecentItems = 32;
+        bool isSearching = false;
 
         public MainWindow()
         {
@@ -46,11 +48,16 @@ namespace FindInFiles
             cmbSearch.ItemsSource = Properties.Settings.Default.recentSearches;
             cmbFolder.ItemsSource = Properties.Settings.Default.recentFolders;
 
+            // select first item
+            cmbFolder.SelectedIndex = 0;
+
             // focus on searchbox
             cmbSearch.Focus();
 
             // get close event, so can save settings
             Application.Current.MainWindow.Closing += new CancelEventHandler(OnWindowClose);
+            // keypress events
+            Application.Current.MainWindow.KeyDown += new KeyEventHandler(KeyDownEventX);
         }
 
         // force combobox text to be selected at start https://stackoverflow.com/q/31483650/5452781
@@ -180,29 +187,56 @@ namespace FindInFiles
             myProcess.Start();
         }
 
+        Thread searchThread;
+        public struct SearchParams
+        {
+            public string searchString;
+            public string searchFolder;
+        }
+
         // main search method
         void Search(string searchString, string sourceFolder)
         {
             if (string.IsNullOrEmpty(searchString) == true) return;
             if (string.IsNullOrEmpty(sourceFolder) == true) return;
-
+            // min search length
+            int searchLen = searchString.Length;
+            if (searchLen < 2) return;
             AddSearchHistory(cmbSearch.Text);
 
             // validate folder
-            if (Directory.Exists(sourceFolder) == false)
-            {
-                return;
-            }
+            if (Directory.Exists(sourceFolder) == false) return;
 
-            int searchLen = searchString.Length;
+            // start thread
+            ParameterizedThreadStart start = new ParameterizedThreadStart(SearchLoop);
+            searchThread = new Thread(start);
+            searchThread.IsBackground = true;
+            var searchParams = new SearchParams();
+            searchParams.searchString = searchString;
+            searchParams.searchFolder = sourceFolder;
+            searchThread.Start(searchParams);
+
+        }
+
+        void SearchLoop(System.Object a)
+        {
+            var pars = (SearchParams)a;
+            string searchString = pars.searchString;
+            string sourceFolder = pars.searchFolder;
 
             // get all files and subfolder files
             string[] files = fileExtensions.SelectMany(f => Directory.GetFiles(sourceFolder, f, SearchOption.AllDirectories)).ToArray();
 
-            // search each file, if hit, add to results.. use threads later maybe
+            // search each file, if hit, add to results
+            isSearching = true;
             var results = new List<ResultItem>();
             for (int i = 0, length = files.Length; i < length; i++)
             {
+                if (isSearching == false)
+                {
+                    Console.WriteLine("exit");
+                    break;
+                }
                 // brute-search, measure later..
                 string wholeFile = File.ReadAllText(files[i]);
 
@@ -223,7 +257,11 @@ namespace FindInFiles
                     continue;
                 }
             }
-            gridResults.ItemsSource = results;
+
+            Dispatcher.Invoke(() =>
+            {
+                gridResults.ItemsSource = results;
+            });
         }
 
         // recent search item selected
@@ -231,8 +269,28 @@ namespace FindInFiles
         {
             Search(cmbSearch.Text, cmbFolder.Text);
         }
-    }
-}
+
+
+        void KeyDownEventX(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Escape:
+                    Console.WriteLine("Search cancelled");
+                    isSearching = false;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void OnExit(object sender, EventArgs e)
+        {
+            isSearching = false;
+        }
+
+    } // class
+} // namespace
 
 public class ResultItem
 {
