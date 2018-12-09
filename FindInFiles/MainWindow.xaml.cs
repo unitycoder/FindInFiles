@@ -18,7 +18,7 @@ namespace FindInFiles
     /// </summary>
     public partial class MainWindow : Window
     {
-        string[] fileExtensions = new[] { "*.txt", "*.shader", "*.cs", "*.log", "*.js", "*.cging" };
+        string[] fileExtensions = new[] { "*.txt", "*.shader", "*.cs", "*.log", "*.js", "*.cging" , ".rtf" };
         const int previewSnippetLength = 32;
         const int maxRecentItems = 32;
         bool isSearching = false;
