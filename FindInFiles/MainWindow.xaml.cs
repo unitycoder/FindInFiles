@@ -1,4 +1,4 @@
-﻿// simple Find In Files tool for searching files containting given string
+// simple Find In Files tool for searching files containting given string
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -10,6 +10,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using WinForms = System.Windows.Forms;
 
 namespace FindInFiles
 {
@@ -140,7 +141,15 @@ namespace FindInFiles
 
         private void btnBrowse_Click(object sender, RoutedEventArgs e)
         {
-            // TODO browse for folder
+            // Create Folder Browser and give it a title
+            WinForms.FolderBrowserDialog folderBrowser = new WinForms.FolderBrowserDialog();
+            folderBrowser.Description = "Select a foooooolder";
+
+            // show it to the user
+            folderBrowser.ShowDialog();
+
+            // retrieve the input
+            cmbFolder.Text = folderBrowser.SelectedPath;
         }
 
         // special keys for search field
