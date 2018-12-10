@@ -1,4 +1,4 @@
-﻿// simple Find In Files tool for searching files containting given string
+// simple Find In Files tool for searching files containting given string
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -10,6 +10,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using WinForms = System.Windows.Forms;
 
 namespace FindInFiles
 {
