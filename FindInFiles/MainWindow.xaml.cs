@@ -141,7 +141,15 @@ namespace FindInFiles
 
         private void btnBrowse_Click(object sender, RoutedEventArgs e)
         {
-            // TODO browse for folder
+            // Create Folder Browser and give it a title
+            WinForms.FolderBrowserDialog folderBrowser = new WinForms.FolderBrowserDialog();
+            folderBrowser.Description = "Select a foooooolder";
+
+            // show it to the user
+            folderBrowser.ShowDialog();
+
+            // retrieve the input
+            cmbFolder.Text = folderBrowser.SelectedPath;
         }
 
         // special keys for search field
