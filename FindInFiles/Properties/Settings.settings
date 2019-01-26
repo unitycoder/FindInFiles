@@ -14,5 +14,8 @@
     <Setting Name="recentFolders" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="extensionList" Type="System.String" Scope="User">
+      <Value Profile="(Default)">*.txt|*.shader|*.cs|*.log|*.js|*.cginc|*.rtf</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

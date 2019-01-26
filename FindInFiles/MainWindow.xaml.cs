@@ -19,7 +19,7 @@ namespace FindInFiles
     /// </summary>
     public partial class MainWindow : Window
     {
-        string[] fileExtensions = new[] { "*.txt", "*.shader", "*.cs", "*.log", "*.js", "*.cging" , "*.rtf" };
+        string[] fileExtensions;
         const int previewSnippetLength = 32;
         const int maxRecentItems = 32;
         bool isSearching = false;
@@ -44,6 +44,10 @@ namespace FindInFiles
             // window size
             this.Width = Properties.Settings.Default.windowWidth;
             this.Height = Properties.Settings.Default.windowHeight;
+
+            // get extensions
+            txtExtensions.Text = Properties.Settings.Default.extensionList;
+            RefreshExtensionsList();
 
             // restore search history
             cmbSearch.ItemsSource = Properties.Settings.Default.recentSearches;
@@ -79,6 +83,7 @@ namespace FindInFiles
         {
             Properties.Settings.Default.windowWidth = (int)this.Width;
             Properties.Settings.Default.windowHeight = (int)this.Height;
+            Properties.Settings.Default.extensionList = txtExtensions.Text;
             Properties.Settings.Default.Save();
         }
 
@@ -95,13 +100,14 @@ namespace FindInFiles
                 Properties.Settings.Default.recentSearches = new StringCollection();
             }
 
-            // remove old items
+            // remove old items if too many
             if (Properties.Settings.Default.recentSearches.Count > maxRecentItems)
             {
+                Console.WriteLine("too many items, removing " + Properties.Settings.Default.recentSearches[0]);
                 Properties.Settings.Default.recentSearches.RemoveAt(0);
             }
 
-            // skip if duplicate
+            // skip if duplicate already in list
             if (Properties.Settings.Default.recentSearches.Contains(searchString) == false)
             {
                 Properties.Settings.Default.recentSearches.Add(searchString);
@@ -212,6 +218,7 @@ namespace FindInFiles
             int searchLen = searchString.Length;
             if (searchLen < 2) return;
             AddSearchHistory(cmbSearch.Text);
+            AddFolderHistory(cmbFolder.Text);
 
             // validate folder
             if (Directory.Exists(sourceFolder) == false) return;
@@ -243,7 +250,6 @@ namespace FindInFiles
             {
                 if (isSearching == false)
                 {
-                    Console.WriteLine("exit");
                     break;
                 }
                 // brute-search, measure later..
@@ -296,6 +302,34 @@ namespace FindInFiles
         private void OnExit(object sender, EventArgs e)
         {
             isSearching = false;
+        }
+
+        private void RefreshExtensionsList()
+        {
+            var newExtensions = txtExtensions.Text.Split('|');
+            if (newExtensions != null && newExtensions.Length > 0)
+            {
+                fileExtensions = newExtensions;
+            }
+            else // use default list if nothing else
+            {
+                fileExtensions = new[] { "*.txt", "*.shader", "*.cs", "*.log", "*.js", "*.cginc", "*.rtf" };
+            }
+        }
+
+        private void OnLostFocusExtensions(object sender, EventArgs e)
+        {
+            RefreshExtensionsList();
+        }
+
+        // enter pressed in extensions textbox
+        private void txtExtensions_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                RefreshExtensionsList();
+                cmbSearch.Focus();
+            }
         }
 
     } // class

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FindInFiles"
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="FindInFiles.MainWindow"
         mc:Ignorable="d"
-        Title="FindInFiles" Height="392.388" Width="781.747" Icon="findinfiles.ico"
+        Title="FindInFiles" Height="462.843" Width="781.747" Icon="findinfiles.ico"
 		Closed="OnExit"
 		>
 	<Grid Margin="1,0,-1,0">
@@ -17,9 +17,12 @@
 		<Button x:Name="btnBrowse" Content="..." HorizontalAlignment="Left" Margin="686,28,0,0" VerticalAlignment="Top" Width="75" Click="btnBrowse_Click" Height="22"/>
 		<DataGrid x:Name="gridResults" HorizontalAlignment="Left" Height="294" Margin="11,58,0,0" VerticalAlignment="Top" Width="754" MouseDoubleClick="gridResults_MouseDoubleClick" IsReadOnly="True" IsTabStop="True" TabIndex="2"/>
 		<ComboBox x:Name="cmbSearch" HorizontalAlignment="Left" Margin="10,28,0,0" VerticalAlignment="Top" Width="227" KeyDown="OnKeyDownSearch" IsEditable="True" DropDownClosed="cmbSearch_DropDownClosed" IsSynchronizedWithCurrentItem="True" IsTabStop="True" TabIndex="0" Loaded="cmbSearch_Loaded" />
-		<ComboBox x:Name="cmbFolder" HorizontalAlignment="Left" Margin="356,28,0,0" VerticalAlignment="Top" KeyDown="OnKeyDownFolder" Width="325" IsEditable="True" IsTabStop="True" TabIndex="1"/>
-		<Label Content="Search String" HorizontalAlignment="Left" Margin="6,8,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.026,0.308" Height="30"/>
-		<Label Content="Folder" HorizontalAlignment="Left" Margin="351,8,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.026,0.308" Height="30"/>
+		<ComboBox x:Name="cmbFolder" HorizontalAlignment="Left" Margin="356,28,0,0" VerticalAlignment="Top" KeyDown="OnKeyDownFolder" Width="325" IsEditable="True" IsTabStop="True" TabIndex="1" />
+		<Label Content="Search String" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.026,0.308" Height="30" FontWeight="Bold"/>
+		<Label Content="Folder" HorizontalAlignment="Left" Margin="351,6,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.026,0.308" Height="30" FontWeight="Bold"/>
+		<Label Content="Settings" HorizontalAlignment="Left" Margin="11,363,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.026,0.308" Height="30" FontWeight="Bold"/>
+		<TextBox x:Name="txtExtensions" KeyUp="txtExtensions_KeyUp" LostFocus="OnLostFocusExtensions" HorizontalAlignment="Left" Height="23" Margin="84,399,0,0" TextWrapping="Wrap" Text="*.txt|*.shader|*.cs|*.log|*.js|*.cginc|*.rtf" VerticalAlignment="Top" Width="361"/>
+		<Label Content="Extensions:" HorizontalAlignment="Left" Margin="11,395,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.026,0.308" Height="30"/>
 
 	</Grid>
 </Window>
