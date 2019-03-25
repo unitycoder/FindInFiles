@@ -32,15 +32,6 @@ namespace FindInFiles
 
         void Start()
         {
-            // get commandline params if any
-            string[] args = Environment.GetCommandLineArgs();
-
-            // have any args? first item is exe name, skip that
-            if (args.Length > 1)
-            {
-                cmbFolder.Text = args[1];
-            }
-
             // window size
             this.Width = Properties.Settings.Default.windowWidth;
             this.Height = Properties.Settings.Default.windowHeight;
@@ -55,6 +46,14 @@ namespace FindInFiles
 
             // select first item
             cmbFolder.SelectedIndex = 0;
+
+            // get commandline params if any
+            string[] args = Environment.GetCommandLineArgs();
+            if (args.Length > 1)
+            {
+                cmbFolder.Text = args[1].Replace("\"", "");
+            }
+
 
             // focus on searchbox
             cmbSearch.Focus();
