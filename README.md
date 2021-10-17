@@ -6,6 +6,9 @@ I couldn't find any simple tool for searching files containing given text..<br>
 Still work-in-progress (but usable already)
 <hr>
 
+### Alternatives
+- https://github.com/unitycoder/FindInFiles/wiki/Existing-Find-In-Files-Tools
+
 ## Current Features
 - Search text in files from given folder (and subfolders)
 - Can be launched from Commandline or Explorer context menu (to automatically pass target folder)
