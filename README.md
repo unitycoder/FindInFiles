@@ -8,7 +8,6 @@ Still work-in-progress (but usable already)
 
 ### Alternatives
 - https://github.com/unitycoder/FindInFiles/wiki/Existing-Find-In-Files-Tools
-- https://github.com/TautvydasZilys/FileSystemSearch
 
 ## Current Features
 - Search text in files from given folder (and subfolders)
